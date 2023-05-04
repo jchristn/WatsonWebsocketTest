@@ -10,18 +10,18 @@ namespace WatsonWebsocketTest
     {
         static string _Hostname = "localhost";
         static int _Port = 9000;
-        static string _ClientIpPort = null;
+        static Guid _ClientGuid ;
 
         static void Main(string[] args)
         {
             using (WatsonWsServer wss = new WatsonWsServer(_Hostname, _Port, false))
             {
-                wss.ClientConnected += (s, e) => Console.WriteLine("Client connected: " + e.IpPort);
-                wss.ClientDisconnected += (s, e) => Console.WriteLine("Client disconnected: " + e.IpPort);
+                wss.ClientConnected += (s, e) => Console.WriteLine("Client connected: " + e.Client.Guid);
+                wss.ClientDisconnected += (s, e) => Console.WriteLine("Client disconnected: " + e.Client.Guid);
                 wss.MessageReceived += (s, e) =>
                 {
-                    Console.WriteLine("Server message received from " + e.IpPort + ": " + Encoding.UTF8.GetString(e.Data));
-                    _ClientIpPort = e.IpPort;
+                    Console.WriteLine("Server message received from " + e.Client.Guid + ": " + Encoding.UTF8.GetString(e.Data));
+                    _ClientGuid = e.Client.Guid;
                 };
 
                 wss.Start();
@@ -43,7 +43,7 @@ namespace WatsonWebsocketTest
                     Thread.Sleep(2500);
 
                     Console.WriteLine("Sending message from server to client...");
-                    wss.SendAsync(_ClientIpPort, "Hello from server").Wait();
+                    wss.SendAsync(_ClientGuid, "Hello from server").Wait();
 
                     Console.WriteLine("Press ENTER to exit");
                     Console.ReadLine();

@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="WatsonWebsocket" Version="2.1.7.2" />
+    <PackageReference Include="WatsonWebsocket" Version="4.0.8" />
   </ItemGroup>
 
 </Project>
